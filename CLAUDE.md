@@ -1,10 +1,13 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this
+repository.
 
 ## Project Overview
 
-This is a Model Context Protocol (MCP) server built with Deno that provides Slack webhook integration tools to LLM applications like Claude Desktop. The server exposes tools that allow the LLM to send messages to Slack channels via incoming webhooks through a standardized MCP interface.
+This is a Model Context Protocol (MCP) server built with Deno that provides Slack webhook
+integration tools to LLM applications like Claude Desktop. The server exposes tools that allow the
+LLM to send messages to Slack channels via incoming webhooks through a standardized MCP interface.
 
 ## Development Commands
 
@@ -78,14 +81,13 @@ The server requires a Slack webhook URL. Configure it using:
    SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL deno task dev
    ```
 
-2. **.env file** (recommended for local development):
-   Create a `.env` file:
+2. **.env file** (recommended for local development): Create a `.env` file:
    ```
    SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
    ```
 
-3. **MCP Client Configuration**:
-   Configure in Claude Desktop's `~/Library/Application Support/Claude/claude_desktop_config.json`:
+3. **MCP Client Configuration**: Configure in Claude Desktop's
+   `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ## MCP Server Configuration
 
@@ -96,7 +98,13 @@ For Claude Desktop, add to configuration:
   "mcpServers": {
     "slack-webhook": {
       "command": "deno",
-      "args": ["run", "--allow-net", "--allow-env", "--allow-read", "/path/to/slack-webhook-mcp/src/index.ts"],
+      "args": [
+        "run",
+        "--allow-net",
+        "--allow-env",
+        "--allow-read",
+        "/path/to/slack-webhook-mcp/src/index.ts"
+      ],
       "env": {
         "SLACK_WEBHOOK_URL": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
       }
@@ -106,6 +114,7 @@ For Claude Desktop, add to configuration:
 ```
 
 For compiled binary:
+
 ```json
 {
   "mcpServers": {
@@ -128,11 +137,13 @@ The server exposes the following tools:
 Sends a message to a Slack channel via webhook.
 
 Parameters:
+
 - `message` (required): The message text to send
 - `webhook_url` (optional): Override the default webhook URL from environment
 - `format` (optional): Message format - "text" or "markdown" (default: "markdown")
 
 Example usage in Claude Desktop:
+
 - "Send a Slack message saying the deployment was successful"
 - "Notify the team on Slack that the tests are passing"
 - "Send 'Build failed: timeout in test suite' to Slack"
@@ -174,7 +185,8 @@ Example usage in Claude Desktop:
 
 ## Implementation Notes
 
-1. **Deno Permissions**: The server requires `--allow-net` for HTTP requests, `--allow-env` for environment variables, and `--allow-read` for .env file
+1. **Deno Permissions**: The server requires `--allow-net` for HTTP requests, `--allow-env` for
+   environment variables, and `--allow-read` for .env file
 2. **Import Maps**: All external dependencies are managed through deno.json imports section
 3. **Error Handling**: All errors are caught and returned as structured MCP error responses
 4. **URL Validation**: Webhook URLs must match the pattern `https://hooks.slack.com/services/...`
@@ -190,20 +202,21 @@ Example usage in Claude Desktop:
 4. **Environment Isolation**: Use test-specific environment variables
 
 Example test:
-```typescript
-import { assertEquals } from "@std/assert";
 
-Deno.test("send_slack_message sends correct payload", async () => {
+```typescript
+import { assertEquals } from '@std/assert';
+
+Deno.test('send_slack_message sends correct payload', async () => {
   using _mock = await mockFetch();
-  
+
   // Mock the Slack API response
   globalThis.fetch = async (url: string | URL | Request, init?: RequestInit) => {
-    if (url === "https://hooks.slack.com/services/test") {
+    if (url === 'https://hooks.slack.com/services/test') {
       return new Response(JSON.stringify({ ok: true }), { status: 200 });
     }
-    return new Response("Not found", { status: 404 });
+    return new Response('Not found', { status: 404 });
   };
-  
+
   // Test implementation
 });
 ```

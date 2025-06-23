@@ -1,0 +1,25 @@
+# Environment variables
+.env
+.env.local
+
+# Deno
+deno.lock
+
+# Coverage
+coverage/
+cov_profile/
+
+# Compiled binary
+slack-webhook-server
+slack-webhook-server.exe
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
